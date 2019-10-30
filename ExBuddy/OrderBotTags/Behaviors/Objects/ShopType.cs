@@ -2,44 +2,24 @@
 {
     public enum ShopType
     {
-#if RB_CN
-		RedCrafter50,
+        Yellow50,
 
-		RedCrafter61,
+        Yellow58,
 
-		YellowCrafter,
+        Yellow61,
 
-		YellowCrafterItems,
+        MasterRecipes,
 
-		RedGatherer50,
+        YellowGear,
 
-		RedGatherer61,
+        YellowGearII,
 
-		YellowGatherer,
+        YellowAugmentation,
 
-		YellowGathererItems
-#else
-        RedCrafter50,
+        Yellow70,
 
-        RedCrafter61,
+        WhiteGear,
 
-        RedCrafterMasterRecipes,
-
-        YellowCrafter,
-
-        YellowCrafterAugmentation,
-
-        YellowCrafterItems,
-
-        RedGatherer50,
-
-        RedGatherer61,
-
-        YellowGatherer,
-
-        YellowGathererAugmentation,
-
-        YellowGathererItems
-#endif
+        White80,
     }
 }

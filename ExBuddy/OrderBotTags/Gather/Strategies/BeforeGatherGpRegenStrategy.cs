@@ -42,7 +42,7 @@
 
         private readonly IBeforeGatherGpRegenStrategyLogger logger;
         private readonly CordialStockManager cordialStockManager;
-        protected readonly short gpPerTick;
+        protected readonly ushort gpPerTick;
 
         protected IGatheringRotation gatherRotation;
         protected GatherStrategy gatherStrategy;
@@ -187,7 +187,7 @@
             this.CalculateTargetAndCordialSelection();
 
             // Calculate regeneration parameters
-            this.RegeneratedGp = (short)(this.TargetGp - this.CordialGp - this.StartingGp);
+            this.RegeneratedGp = (ushort)(this.TargetGp - this.CordialGp - this.StartingGp);
             if (this.RegeneratedGp < 0) this.RegeneratedGp = 0;
             this.EffectiveTimeToRegenerate = CharacterResource.EstimateExpectedRegenerationTime(this.RegeneratedGp);
         }
@@ -208,7 +208,7 @@
 
             foreach (var breakpointGp in this.gatherRotation.Attributes.RequiredGpBreakpoints.OrderByDescending(bp => bp))
             {
-                this.TargetGp = this.BreakpointGp = (short)breakpointGp;
+                this.TargetGp = this.BreakpointGp = (ushort)breakpointGp;
 
                 // If we'll regen enough, do not select a cordial
                 if (this.EffectiveGp >= this.TargetGp)
@@ -226,7 +226,7 @@
                     if (bestCordial != null)
                     {
                         this.Cordial = bestCordial;
-                        this.CordialGp = (short)CordialStockManager.CordialDataMap[bestCordial.ItemKey].Gp;
+                        this.CordialGp = (ushort)CordialStockManager.CordialDataMap[bestCordial.ItemKey].Gp;
                         return;
                     }
                 }
@@ -236,7 +236,7 @@
             }
 
             // There is no way to regenerate the required GP
-            this.BreakpointGp = (short)lastBreakpointGpValue;
+            this.BreakpointGp = (ushort)lastBreakpointGpValue;
             this.TargetGp = this.StartingGp;
         }
 
@@ -253,7 +253,7 @@
             }
 
             // Execute the wait coroutine
-            this.logger.RegeneratingGp(Convert.ToInt16((this.EffectiveTimeToRegenerate.TotalSeconds)));
+            this.logger.RegeneratingGp(Convert.ToInt32((this.EffectiveTimeToRegenerate.TotalSeconds)));
 
             await Coroutine.Wait(
                 this.EffectiveTimeTillGather,
@@ -400,7 +400,7 @@
                     : string.Empty,
                 this.Cordial != null
                     ? this.CordialGp
-                    : (short)0
+                    : (ushort)0
             );
         }
 
@@ -422,12 +422,16 @@
         /// <summary>
         /// Gets the player's starting GP at beginning of strategy
         /// </summary>
-        public short StartingGp { get; protected set; }
+        public ushort StartingGp
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// Gets the player's current GP
         /// </summary>
-        public short CurrentGp
+        public ushort CurrentGp
         {
             get { return ExProfileBehavior.Me.CurrentGP; }
         }
@@ -435,27 +439,47 @@
         /// <summary>
         /// Gets the player's max GP
         /// </summary>
-        public short MaxGp { get; protected set; }
+        public ushort MaxGp
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// Gets what the player's GP will be when gathering begins
         /// </summary>
-        public short EffectiveGp { get; protected set; }
+        public ushort EffectiveGp
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// Gets the gathering rotation breakpoint GP
         /// </summary>
-        public short BreakpointGp { get; protected set; }
+        public ushort BreakpointGp
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// Gets the GP target to regenerate to
         /// </summary>
-        public short TargetGp { get; protected set; }
+        public ushort TargetGp
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// Gets the GP that we will regenerate
         /// </summary>
-        public short RegeneratedGp { get; protected set; }
+        public ushort RegeneratedGp
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// Gets the cordial selected for use during regeneration
@@ -465,6 +489,10 @@
         /// <summary>
         /// Amount of GP provided by the cordial
         /// </summary>
-        public short CordialGp { get; protected set; }
+        public ushort CordialGp
+        {
+            get;
+            protected set;
+        }
     }
 }
